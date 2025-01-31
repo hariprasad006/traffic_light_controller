@@ -1,0 +1,59 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 01/30/2025 01:10:48 PM
+// Design Name: 
+// Module Name: tlc_tb
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module tlc_tb( );
+reg clk;
+reg reset;
+reg x;
+wire [1:0]EW;
+wire[1:0]NS;
+tlc uut(.clk(clk),.reset(reset),.x(x),.EW(EW),.NS(NS));
+always #10 clk=~clk;
+task apply_reset;
+begin
+reset=1;
+#40;
+reset=0;
+end
+endtask
+initial begin
+clk=0;
+reset=0;
+x=0;
+apply_reset;
+$display("test case 1:no traffic on NS road(x=0)");
+x=0;
+#100;
+$display("test case 2:traffic detected on NS road(x=1)");
+x=1;
+#100;
+$display("test case 3:traffic stops on NS road(x=0)");
+x=0;
+#100
+$display("simulation complete.");
+$stop;
+end
+initial
+ begin
+$monitor ("time:%t | state: EW =tb NS=tb |sensor x=tb",$time,EW,NS,x);
+end
+endmodule
